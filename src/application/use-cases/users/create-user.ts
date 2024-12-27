@@ -18,7 +18,7 @@ export class CreateUserUseCase {
       throw new ConflictError("Email already exists");
     }
 
-    const passwordHash = await bcrypt.hash(data.password, 8);
+    const passwordHash = await bcrypt.hash(data.password, 10);
     data.password = passwordHash;
 
     const user = await this.userRepository.create(data);
