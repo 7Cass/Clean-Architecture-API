@@ -1,5 +1,6 @@
 import z from "zod";
 import { FastifyTypedInstance } from "../../types/fastify/fastify-instance";
+import { authSchema } from "../../domain/schemas/auth.schema";
 
 export async function authRoutes(app: FastifyTypedInstance) {
   const authController = app.authController;
@@ -11,10 +12,7 @@ export async function authRoutes(app: FastifyTypedInstance) {
       security: [{
         CookieAuth: []
       }],
-      body: z.object({
-        email: z.string().email(),
-        password: z.string().min(8),
-      })
+      body: authSchema
     }
   }, (request, reply) => authController.login(request, reply));
 

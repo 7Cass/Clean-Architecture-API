@@ -1,6 +1,7 @@
 import z from "zod";
 import { FastifyTypedInstance } from "../../types/fastify/fastify-instance";
 import { authMiddleware } from "../../infrastructure/middlewares/auth-middleware";
+import { bookSchema, createBookSchema, updateBookSchema } from "../../domain/schemas/book.schema";
 
 export async function bookRoutes(app: FastifyTypedInstance) {
   const bookController = app.bookController;
@@ -11,19 +12,7 @@ export async function bookRoutes(app: FastifyTypedInstance) {
       description: "List all books",
       tags: ["Books"],
       response: {
-        200: z.array(z.object({
-          id: z.string(),
-          title: z.string(),
-          author: z.string(),
-          description: z.string(),
-          userId: z.string().nullable(),
-          user: z.object({
-            id: z.string(),
-            name: z.string(),
-            email: z.string(),
-            password: z.string(),
-          }).nullable()
-        })),
+        200: bookSchema,
       }
     }
   }, (request, reply) => bookController.list(request, reply));
@@ -33,20 +22,8 @@ export async function bookRoutes(app: FastifyTypedInstance) {
     schema: {
       description: "Create a new book",
       tags: ["Books"],
-      body: z.object({
-        title: z.string(),
-        author: z.string(),
-        description: z.string(),
-      }),
-      response: {
-        201: z.object({
-          id: z.string(),
-          title: z.string(),
-          author: z.string(),
-          description: z.string(),
-          userId: z.string().nullable()
-        }),
-      }
+      body: createBookSchema,
+      response: bookSchema,
     }
   }, (request, reply) => bookController.create(request, reply));
 
@@ -55,26 +32,9 @@ export async function bookRoutes(app: FastifyTypedInstance) {
     schema: {
       description: "Update a book",
       tags: ["Books"],
-      body: z.object({
-        title: z.string().optional(),
-        author: z.string().optional(),
-        description: z.string().optional(),
-        userId: z.string().optional(),
-      }),
+      body: updateBookSchema,
       response: {
-        200: z.object({
-          id: z.string(),
-          title: z.string(),
-          author: z.string(),
-          description: z.string(),
-          userId: z.string().nullable(),
-          user: z.object({
-            id: z.string(),
-            name: z.string(),
-            email: z.string(),
-            password: z.string(),
-          }).nullable()
-        }),
+        200: bookSchema,
       }
     }
   }, (request, reply) => bookController.update(request, reply));

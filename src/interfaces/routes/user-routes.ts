@@ -1,6 +1,7 @@
 import z from "zod";
 import { FastifyTypedInstance } from "../../types/fastify/fastify-instance";
 import { authMiddleware } from "../../infrastructure/middlewares/auth-middleware";
+import { userSchema, usersSchema } from "../../domain/schemas/user.schema";
 
 export async function userRoutes(app: FastifyTypedInstance) {
   const userController = app.userController;
@@ -11,18 +12,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
       description: 'List users',
       tags: ['Users'],
       response: {
-        200: z.array(z.object({ // @TODO: Criar um schema para user
-          id: z.string(),
-          name: z.string(),
-          email: z.string(),
-          books: z.array(z.object({
-            id: z.string(),
-            title: z.string(),
-            author: z.string(),
-            description: z.string(),
-            userId: z.string().nullable()
-          }))
-        }))
+        200: usersSchema
       }
     }
   }, (request, reply) => {
@@ -33,18 +23,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
     schema: {
       description: "Create a new user",
       tags: ["Users"],
-      body: z.object({
-        name: z.string(),
-        email: z.string().email(),
-        password: z.string().min(8),
-        books: z.array(z.object({
-          id: z.string(),
-          title: z.string(),
-          author: z.string(),
-          description: z.string(),
-          userId: z.string().nullable()
-        })).optional()
-      }),
+      body: userSchema,
       response: {
         201: z.object({
           id: z.string(),
