@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { ConflictError } from "../../../domain/errors/conflict-error";
 import { MongoUserRepository } from "../../../domain/repositories/mongodb/user-repository";
+import { BadRequestError } from "../../../domain/errors/bad-request-error";
 
 interface CreateUserInput {
   name: string;
@@ -16,6 +17,10 @@ export class CreateUserUseCase {
 
     if (emailExists) {
       throw new ConflictError("Email already exists");
+    }
+
+    if (data.password.length < 8) {
+      throw new BadRequestError("Password must have at least 8 characters");
     }
 
     const passwordHash = await bcrypt.hash(data.password, 10);
