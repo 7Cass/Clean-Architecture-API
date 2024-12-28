@@ -24,7 +24,6 @@ export class UpdateBookUseCase {
 
     if (data.userId) {
       const userExists = await this.userRepository.findById(data.userId);
-      console.log(userExists);
 
       if (!userExists) {
         throw new NotFoundError("User not found.");

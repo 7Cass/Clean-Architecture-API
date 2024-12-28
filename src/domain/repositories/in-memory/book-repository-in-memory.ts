@@ -2,8 +2,6 @@ import { randomUUID } from "node:crypto";
 import { IBookRepository } from "../../../interfaces/repositories/book-repository";
 import { Book } from "../../entities/book";
 import { Prisma } from "@prisma/client";
-import { ConflictError } from "../../errors/conflict-error";
-import { NotFoundError } from "../../errors/not-found-error";
 
 export class BookRepositoryInMemory implements IBookRepository {
   private books: Book[] = [];
