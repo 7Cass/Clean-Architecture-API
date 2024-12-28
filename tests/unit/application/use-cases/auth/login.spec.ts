@@ -1,14 +1,13 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, beforeEach, vi, Mocked } from "vitest";
 import { UserRepositoryInMemory } from "../../../../../src/domain/repositories/in-memory/user-repository-in-memory";
 import { LoginUseCase } from "../../../../../src/application/use-cases/auth/login";
-import { RefreshTokenRepositoryInMemory } from "../../../../../src/domain/repositories/in-memory/refresh-token-repository-in-memory";
 import bcrypt from "bcrypt";
 import { User } from "../../../../../src/domain/entities/user";
 import { IRefreshTokenRepository } from "../../../../../src/interfaces/repositories/refresh-token-repository";
 
 describe("Login Use Case", () => {
   let userRepository: UserRepositoryInMemory;
-  let refreshTokenRepositoryMock: IRefreshTokenRepository;
+  let refreshTokenRepositoryMock: Mocked<IRefreshTokenRepository>;
   let loginUseCase: LoginUseCase;
 
   beforeEach(() => {
